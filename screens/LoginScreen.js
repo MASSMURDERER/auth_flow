@@ -3,8 +3,7 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
-    Button
+    TextInput
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -27,6 +26,9 @@ class LoginScreen extends Component {
     render() {
         return (
         <View style={styles.container}>
+          <View style={{alignItems:'center',marginRight:10}}>
+          <Text style={{fontWeight:'bold',fontSize:20}}>Login</Text>
+          </View>
         {this.state.errorMessage &&
           <View style={{alignItems: 'center'}}>  
           <Text style={{ color: 'red' }}>
@@ -38,7 +40,7 @@ class LoginScreen extends Component {
           style={styles.textInput}
           autoCapitalize="none"
           placeholder="Email"
-          placeholderTextColor='black'
+          placeholderTextColor='grey'
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
@@ -47,22 +49,22 @@ class LoginScreen extends Component {
           style={styles.textInput}
           autoCapitalize="none"
           placeholder="Password"
-          placeholderTextColor='black'
+          placeholderTextColor='grey'
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <View style={{paddingHorizontal:20,marginTop:10}}>
-        <TouchableOpacity onPress={this.handleLogin} style={{backgroundColor:'black',padding:10,alignItems:'center'}}>
-            <Text style={{color:"white"}}>
+        <View style={{paddingHorizontal:20,marginTop:15}}>
+        <TouchableOpacity onPress={this.handleLogin} style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}>
+            <Text style={{color:"white",fontSize:15}}>
                 Login
             </Text>
         </TouchableOpacity>
         </View>
-        <View style={{paddingHorizontal:20,marginTop:10}}>
+        <View style={{paddingHorizontal:20,marginTop:15}}>
         <TouchableOpacity
-          style={{backgroundColor:'black',padding:10,alignItems:'center'}}  
+          style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}  
           onPress={() => this.props.navigation.navigate('SignUp')}>
-              <Text style={{color:'white'}}>
+              <Text style={{color:'white',fontSize:15}}>
               Dont have an account? Sign Up
               </Text>
           </TouchableOpacity>
@@ -77,17 +79,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor:'white',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingHorizontal:10
     },
     textInput: {
-        height: 40,
-        width: '90%',
-        borderColor: 'gray',
-        borderWidth: 2,
-        marginTop: 10,
-        paddingLeft:7,
-        marginHorizontal:22,
-        marginLeft:18,
-        justifyContent:'center'
-      }
+      height: 50,
+      width: '90%',
+      borderColor: 'lightgrey',
+      borderRadius:5,
+      borderWidth: 1,
+      marginTop: 15,
+      paddingLeft:10,
+      marginHorizontal:22,
+      marginLeft:18,
+      justifyContent:'center',
+      backgroundColor:'whitesmoke'
+    }
 });

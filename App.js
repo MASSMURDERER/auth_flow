@@ -14,14 +14,14 @@ import MainScreen from './screens/MainScreen'
 import LoadingScreen from './screens/LoadingScreen'
 
 var firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: ""
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
 };
 // Initialize Firebase
 if (!firebase.apps.length) {
