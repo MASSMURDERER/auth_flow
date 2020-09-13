@@ -2,7 +2,7 @@ import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import { createDrawerNavigator } from '@react-navigation/drawer';
+
 
 
 import * as firebase from 'firebase'
@@ -85,6 +85,6 @@ function shouldHeaderBeShown(route){
 
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+
 
 
