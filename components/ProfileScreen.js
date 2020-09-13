@@ -25,7 +25,7 @@ class ProfileScreen extends Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity onPress={this.signOut} style={{backgroundColor:'black',padding:7}}>
-                    <Text style={{color:'white'}}>Logout</Text>
+                    <Text style={{color:'white'}}>LOGOUT</Text>
                 </TouchableOpacity>
             </View>
         );

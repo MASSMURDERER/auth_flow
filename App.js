@@ -14,14 +14,14 @@ import MainScreen from './screens/MainScreen'
 import LoadingScreen from './screens/LoadingScreen'
 
 var firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: ""
+    apiKey: "AIzaSyBJxqrv78rF0gDZjxWNTFIcuQvsHaTkUoQ",
+    authDomain: "auth-flow-ccd4a.firebaseapp.com",
+    databaseURL: "https://auth-flow-ccd4a.firebaseio.com",
+    projectId: "auth-flow-ccd4a",
+    storageBucket: "auth-flow-ccd4a.appspot.com",
+    messagingSenderId: "1063722450044",
+    appId: "1:1063722450044:web:97d13d318f2ba704795df9",
+    measurementId: "G-CY5R577N8N"
 };
 // Initialize Firebase
 if (!firebase.apps.length) {

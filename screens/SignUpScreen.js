@@ -4,37 +4,52 @@ import {
     Text,
     StyleSheet,
     TextInput,
-    Button
+    ImageBackground
 } from "react-native";
 
 import * as firebase from 'firebase'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 class SignUpScreen extends Component {
+  
+  state = { name:'', email: '', password: '', errorMessage: null }
 
-    state = { email: '', password: '', errorMessage: null }
-
-    handleSignUp = () => {
-      const { email, password } = this.state
-      firebase
+    handleName = () => {
+      const {  email, password } = this.state
+        if(this.state.name.length < 4) {
+          alert("Please enter atleast 4 characters")
+          return;
+        }
+        firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(user => this.props.navigation.navigate('Main'))
-        .catch(error => this.setState({ errorMessage: error.message }))
-    }
+        .then(() => this.props.navigation.navigate('Main'))
+        .catch ((error) => this.setState({ errorMessage: error.message }))
+      }
+
 
     render() {
         return (
         <View style={styles.container}>
+          <View style={{alignItems:'center',marginRight:10}}>
+          <Text style={{fontWeight:'bold',fontSize:20}}>SignUp</Text>
+          </View>
         {this.state.errorMessage &&
         <View style={{alignItems:'center'}}>
           <Text style={{ color: 'red'  }}>
             {this.state.errorMessage}
           </Text>
           </View>}
+          <TextInput
+          placeholder="Username"
+          placeholderTextColor='grey'
+          style={styles.textInput}
+          onChangeText={name => this.setState({ name })}
+          value={this.state.name}
+        />  
         <TextInput
           placeholder="Email"
-          placeholderTextColor='black'
+          placeholderTextColor='grey'
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={email => this.setState({ email })}
@@ -43,24 +58,24 @@ class SignUpScreen extends Component {
         <TextInput
           secureTextEntry
           placeholder="Password"
-          placeholderTextColor='black'
+          placeholderTextColor='grey'
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <View style={{paddingHorizontal:20,marginTop:10}}>
-        <TouchableOpacity onPress={this.handleSignUp} style={{backgroundColor:'black',padding:10,alignItems:'center'}}>
+        <View style={{paddingHorizontal:20,marginTop:15}}>
+        <TouchableOpacity onPress={this.handleName} style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}>
             <Text style={{color:"white"}}>
                 Sign Up
             </Text>
         </TouchableOpacity>
         </View>
-        <View style={{paddingHorizontal:20,marginTop:10}}>
+        <View style={{paddingHorizontal:20,marginTop:15}}>
         <TouchableOpacity
-          style={{backgroundColor:'black',padding:10,alignItems:'center'}}  
+          style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}  
           onPress={() => this.props.navigation.navigate('Login')}>
-              <Text style={{color:'white'}}>
+              <Text style={{color:'white',fontSize:15}}>
               Already have an account? Login
               </Text>
           </TouchableOpacity>
@@ -75,17 +90,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingHorizontal:10
     },
     textInput: {
-        height: 40,
+        height: 50,
         width: '90%',
-        borderColor: 'gray',
-        borderWidth: 2,
-        marginTop: 10,
-        paddingLeft:7,
+        borderColor: 'lightgray',
+        borderRadius:5,
+        borderWidth: 1,
+        marginTop: 15,
+        paddingLeft:10,
         marginHorizontal:22,
         marginLeft:18,
-        justifyContent:'center'
+        justifyContent:'center',
+        backgroundColor:'whitesmoke'
       }
 });
