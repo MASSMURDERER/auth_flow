@@ -55,7 +55,7 @@ class LoginScreen extends Component {
         />
         <View style={{paddingHorizontal:20,marginTop:15}}>
         <TouchableOpacity onPress={this.handleLogin} style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}>
-            <Text style={{color:"white",fontSize:15}}>
+            <Text style={{color:"white"}}>
                 Login
             </Text>
         </TouchableOpacity>
@@ -64,7 +64,7 @@ class LoginScreen extends Component {
         <TouchableOpacity
           style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}  
           onPress={() => this.props.navigation.navigate('SignUp')}>
-              <Text style={{color:'white',fontSize:15}}>
+              <Text style={{color:'white'}}>
               Dont have an account? Sign Up
               </Text>
           </TouchableOpacity>
