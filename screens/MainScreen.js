@@ -19,7 +19,7 @@ import Icon3 from 'react-native-vector-icons/Entypo'
 import ExploreScreen from '../component/ExploreScreen'
 import Details from "../ExploreScreen/Details";
 import InboxScreen from '../component/InboxScreen'
-import SearchScreen from '../component/SearchScreen'
+import PostScreen from '../component/PostScreen'
 import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
 import NewsScreen from '../component/NewsScreen'
@@ -66,11 +66,11 @@ const NewsStackScreen = () => {
     )
 }
 
-const SearchStackScreen = () => {
+const PostStackScreen = () => {
     return(
-    <SearchStack.Navigator>
-        <SearchStack.Screen name="Search" component={SearchScreen} options={{headerShown:false}}/>
-    </SearchStack.Navigator>
+    <PostStack.Navigator>
+        <PostStack.Screen name="Post" component={PostScreen} options={{headerShown:false}}/>
+    </PostStack.Navigator>
     )
 }
 
@@ -98,14 +98,6 @@ class MainScreen extends Component {
                        <Icon3 name = "home" color={color} size={24} />
                     )
                 }} />
-                <Tab.Screen name='Search' 
-                component={SearchStackScreen}
-                options={{
-                    tabBarColor:'blue',
-                    tabBarIcon:({color,size}) => (
-                       <Icon1 name = "ios-eye" color={color} size={30} />
-                    )
-                }} />
                 <Tab.Screen name='News' 
                 component={NewsStackScreen}
                 options={{
@@ -113,6 +105,14 @@ class MainScreen extends Component {
                     tabBarIcon:({color,size}) => (
                        <Icon2 name= "newspaper" color={color} size={24} />
                     )
+                }} />
+                <Tab.Screen name='Post' 
+                component={PostStackScreen}
+                options={{
+                    tabBarColor:'blue',
+                    tabBarIcon:({color,size}) => (
+                       <Icon1 name = "ios-add-circle" color={color} size={30} />
+                    ),
                 }} />
                 <Tab.Screen name='Notifications'
                  component={NotificationsStackScreen}
@@ -140,7 +140,7 @@ const Tab = createBottomTabNavigator();
 const ExploreStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
 const NewsStack = createStackNavigator();
-const SearchStack = createStackNavigator();
+const PostStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
 

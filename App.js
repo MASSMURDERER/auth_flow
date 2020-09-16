@@ -14,7 +14,7 @@ import MainScreen from './screens/MainScreen'
 import LoadingScreen from './screens/LoadingScreen'
 
 var firebaseConfig = {
-  apiKey: "",
+    apiKey: "",
     authDomain: "",
     databaseURL: "",
     projectId: "",
@@ -57,8 +57,8 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'Explore';
-    case 'Search':
-      return 'Search';
+    case 'Post':
+      return 'Post';
     case 'News':
       return 'News';  
     case 'Notifications':
@@ -79,7 +79,7 @@ function shouldHeaderBeShown(route){
       return false
     case 'News':
       return false  
-    case 'Search':
+    case 'Post':
       return false
     case 'Profile':
       return false  
