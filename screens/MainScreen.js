@@ -58,8 +58,10 @@ const NotificationsStackScreen = () => {
 
 const NewsStackScreen = () => {
     return(
-    <NewsStack.Navigator>
-        <NotificationsStack.Screen name="News" component={NewsScreen} options={{headerShown:false}}/>
+    <NewsStack.Navigator screenOptions={{headerTitleStyle: {
+        paddingLeft:138
+    }}}>
+        <NotificationsStack.Screen name="News" component={NewsScreen} options={{headerLeft:null}}/>
     </NewsStack.Navigator>
     )
 }
