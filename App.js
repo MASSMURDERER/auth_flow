@@ -52,10 +52,10 @@ const AuthStackNavigator = () => {
 
 
 function getHeaderTitle(route) {
-  const routeName = route.state? route.state.routes[route.state.index].name:'Explore'
+  const routeName = route.state? route.state.routes[route.state.index].name:'Home'
 
   switch (routeName) {
-    case 'Explore':
+    case 'Home':
       return 'Explore';
     case 'Inbox':
       return 'Inbox';
@@ -70,15 +70,15 @@ function getHeaderTitle(route) {
 
 function shouldHeaderBeShown(route){
 
-  const routeName = route.state? route.state.routes[route.state.index].name:'Explore'
+  const routeName = route.state? route.state.routes[route.state.index].name:'Home'
 
   switch(routeName){
-    case 'Explore':
+    case 'Home':
       return false
     case 'Notifications':
       return false
     case 'News':
-    return false  
+      return false  
     case 'Inbox':
       return false
     case 'Profile':
