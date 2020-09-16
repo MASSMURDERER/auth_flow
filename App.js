@@ -57,8 +57,8 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'Explore';
-    case 'Inbox':
-      return 'Inbox';
+    case 'Search':
+      return 'Search';
     case 'News':
       return 'News';  
     case 'Notifications':
@@ -79,7 +79,7 @@ function shouldHeaderBeShown(route){
       return false
     case 'News':
       return false  
-    case 'Inbox':
+    case 'Search':
       return false
     case 'Profile':
       return false  
