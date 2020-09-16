@@ -8,6 +8,8 @@ import {
 
 import * as firebase from "firebase"
 
+import Fire from '../Fire1'
+
 class LoadingScreen extends Component {
 
     componentDidMount() {
