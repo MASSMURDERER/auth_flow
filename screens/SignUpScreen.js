@@ -75,7 +75,7 @@ class SignUpScreen extends Component {
         <TouchableOpacity
           style={{backgroundColor:'dodgerblue',padding:14,alignItems:'center',borderRadius:5}}  
           onPress={() => this.props.navigation.navigate('Login')}>
-              <Text style={{color:'white',fontSize:15}}>
+              <Text style={{color:'white'}}>
               Already have an account? Login
               </Text>
           </TouchableOpacity>

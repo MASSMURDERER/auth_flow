@@ -21,6 +21,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Test",
+    "githubUrl": "https://github.com/MASSMURDERER/auth_flow"
   }
 }

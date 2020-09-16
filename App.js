@@ -1,7 +1,7 @@
 import React from 'react';
-
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+
 
 
 
@@ -14,7 +14,7 @@ import MainScreen from './screens/MainScreen'
 import LoadingScreen from './screens/LoadingScreen'
 
 var firebaseConfig = {
-    apiKey: "",
+  apiKey: "",
     authDomain: "",
     databaseURL: "",
     projectId: "",
@@ -59,6 +59,8 @@ function getHeaderTitle(route) {
       return 'Explore';
     case 'Inbox':
       return 'Inbox';
+    case 'News':
+      return 'News';  
     case 'Notifications':
       return 'Notifications';
     case 'Profile':
@@ -75,6 +77,8 @@ function shouldHeaderBeShown(route){
       return false
     case 'Notifications':
       return false
+    case 'News':
+    return false  
     case 'Inbox':
       return false
     case 'Profile':
@@ -86,5 +90,5 @@ function shouldHeaderBeShown(route){
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
-
+ 
 

@@ -10,7 +10,6 @@ class NotificationsScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{color:'purple',fontWeight:'bold'}}>NotificationsScreen</Text>
                 <Button title='Notifications' onPress={() => this.props.navigation.navigate('Notify', {name: 'Notifications'})} />
             </View>
         );

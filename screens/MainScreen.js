@@ -8,17 +8,20 @@ import {
     Button
 } from "react-native";
 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack'
 import Icon from 'react-native-vector-icons/Ionicons'
+import Icon2 from 'react-native-vector-icons/FontAwesome5'
+import Icon3 from 'react-native-vector-icons/Entypo'
 
 
-import ExploreScreen from '../components/ExploreScreen'
+import ExploreScreen from '../component/ExploreScreen'
 import Details from "../ExploreScreen/Details";
-import InboxScreen from '../components/InboxScreen'
-import NotificationsScreen from '../components/NotificationsScreen'
+import InboxScreen from '../component/InboxScreen'
+import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
-import ProfileScreen from '../components/ProfileScreen'
+import NewsScreen from '../component/NewsScreen'
+import ProfileScreen from '../component/ProfileScreen'
 
 const ExploreStackScreen = () => {
     return(
@@ -34,6 +37,14 @@ const NotificationsStackScreen = () => {
     <NotificationsStack.Navigator>
         <NotificationsStack.Screen name="Notifications" component={NotificationsScreen} options={{headerShown:false}}/>
         <NotificationsStack.Screen name="Notify" component={Notify} options={({route}) => ({title: route.params.name})}/>
+    </NotificationsStack.Navigator>
+    )
+}
+
+const NewsStackScreen = () => {
+    return(
+    <NotificationsStack.Navigator>
+        <NotificationsStack.Screen name="News" component={NewsScreen}/>
     </NotificationsStack.Navigator>
     )
 }
@@ -60,22 +71,30 @@ const ProfileStackScreen = () => {
 class MainScreen extends Component {
     render() {
         return (
-            <Tab.Navigator initialRouteName='Explore'>
+            <Tab.Navigator initialRouteName='Explore' tabBarOptions={{activeTintColor:'black'}}>
 
-                <Tab.Screen name='Explore' 
+                <Tab.Screen name='Home' 
                 component={ExploreStackScreen}
                 options={{
                     tabBarColor: 'red',
                     tabBarIcon:({color,size}) => (
-                       <Icon name = "ios-search" color={color} size={24} />
+                       <Icon3 name = "home" color={color} size={24} />
                     )
                 }} />
-                <Tab.Screen name='Inbox' 
+                <Tab.Screen name='Search' 
                 component={InboxStackScreen}
                 options={{
                     tabBarColor:'blue',
                     tabBarIcon:({color,size}) => (
-                       <Icon name = "ios-send" color={color} size={24} />
+                       <Icon name = "ios-eye" color={color} size={30} />
+                    )
+                }} />
+                <Tab.Screen name='News' 
+                component={NewsStackScreen}
+                options={{
+                    tabBarColor: 'black',
+                    tabBarIcon:({color,size}) => (
+                       <Icon2 name= "newspaper" color={color} size={24} />
                     )
                 }} />
                 <Tab.Screen name='Notifications'
@@ -100,9 +119,10 @@ class MainScreen extends Component {
 }
 
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const ExploreStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
+const NewsStack = createStackNavigator();
 const InboxStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
