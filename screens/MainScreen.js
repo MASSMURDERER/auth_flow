@@ -59,7 +59,7 @@ const NotificationsStackScreen = () => {
 const NewsStackScreen = () => {
     return(
     <NewsStack.Navigator>
-        <NotificationsStack.Screen name="News" component={NewsScreen}/>
+        <NotificationsStack.Screen name="News" component={NewsScreen} options={{headerShown:false}}/>
     </NewsStack.Navigator>
     )
 }
@@ -67,7 +67,7 @@ const NewsStackScreen = () => {
 const SearchStackScreen = () => {
     return(
     <SearchStack.Navigator>
-        <SearchStack.Screen name="Search" component={SearchScreen} />
+        <SearchStack.Screen name="Search" component={SearchScreen} options={{headerShown:false}}/>
     </SearchStack.Navigator>
     )
 }
