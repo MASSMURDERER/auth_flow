@@ -22,7 +22,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "Test again",
+    "description": "Post testing",
     "githubUrl": "https://github.com/MASSMURDERER/auth_flow"
   }
 }

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import UserPermissions from '../UserPermissions'
 import Constants from "expo-constants"
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -27,19 +27,9 @@ class PostScreen extends Component {
 
 
     componentDidMount(){
-        this.getPhotoPermission();
+        UserPermissions.getCameraPermission()
     }
 
-    getPhotoPermission = async () => {
-        if (Constants.platform.android) {
-            const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL)
-
-
-            if (status != "granted" ){
-                alert("We need permisson to access your camera roll")
-            }
-        }
-    }
 
     handlePost = () => {
         Fire.shared.addPost({text: this.state.text.trim(), localUri: this.state.image}).then(ref => {
@@ -53,7 +43,7 @@ class PostScreen extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1]
+            aspect: [4, 3]
         })
 
         if (!result.cancelled) {
@@ -79,7 +69,7 @@ class PostScreen extends Component {
               </View>
 
               <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
-                <Ionicons name='md-camera' size={32} color='black'></Ionicons>
+                <Ionicons name='ios-camera' size={36} color='black'></Ionicons>
               </TouchableOpacity>
 
               <View style={{marginHorizontal: 32, marginTop: 32, height: 150}}>

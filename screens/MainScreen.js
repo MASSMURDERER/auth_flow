@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { 
-    View,
-    Text,
-    StyleSheet,
-    Platform,
-    Image,
+    StyleSheet
 } from "react-native";
 
 import {Button,Icon} from 'native-base'
@@ -28,17 +24,17 @@ import ProfileScreen from '../component/ProfileScreen'
 const ExploreStackScreen = ({navigation}) => {
     return(
     <ExploreStack.Navigator screenOptions={{headerTitleStyle: {
-        paddingLeft:85
+        paddingLeft:68
     }}}>
         <ExploreStack.Screen name="Home" component={ExploreScreen} options={{
             headerRight: () => (
                 <Button onPress={() => navigation.navigate('Inbox')} transparent>
-                <Icon style={{color:'black',fontSize:30}} name="ios-chatboxes" />
+                <Icon style={{color:"dodgerblue",fontSize:30}} name="ios-chatboxes" />
                 </Button>
             ),
-            headerTitle: "App",
+            headerTitle: "Moments",
             headerLeft: () => (
-                <Icon style={{paddingLeft:10,fontSize:36}} name='ios-camera' />
+                <Icon style={{color:"dodgerblue",paddingLeft:10,fontSize:36}} name='ios-camera' />
             )
         }}/>
         <ExploreStack.Screen name="Inbox" component={InboxScreen} />
@@ -88,14 +84,14 @@ const ProfileStackScreen = () => {
 class MainScreen extends Component {
     render() {
         return (
-            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'dodgerblue', inactiveTintColor:'grey'}}>
+            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'dodgerblue', inactiveTintColor:'grey', showLabel: false}}>
 
                 <Tab.Screen name='Home' 
                 component={ExploreStackScreen}
                 options={{
                     tabBarColor: 'red',
                     tabBarIcon:({color,size}) => (
-                       <Icon3 name = "home" color={color} size={24} />
+                       <Icon3 name = "home" color={color} size={26} />
                     )
                 }} />
                 <Tab.Screen name='News' 
@@ -103,7 +99,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor: 'black',
                     tabBarIcon:({color,size}) => (
-                       <Icon2 name= "newspaper" color={color} size={24} />
+                       <Icon2 name= "newspaper" color={color} size={26} />
                     )
                 }} />
                 <Tab.Screen name='Post' 
@@ -111,7 +107,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor:'blue',
                     tabBarIcon:({color,size}) => (
-                       <Icon1 name = "ios-add-circle" color={color} size={30} />
+                       <Icon1 name = "ios-add-circle" color={color} size={70} style={{marginBottom:50}} />
                     ),
                 }} />
                 <Tab.Screen name='Notifications'
@@ -119,7 +115,7 @@ class MainScreen extends Component {
                  options={{
                     tabBarColor: 'purple',
                      tabBarIcon:({color,size}) => (
-                         <Icon1 name = "ios-heart" color={color} size={24} />
+                         <Icon1 name = "ios-heart" color={color} size={28} />
                      )
                  }} />
                 <Tab.Screen name='Profile' 
@@ -127,7 +123,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor: 'black',
                     tabBarIcon:({color,size}) => (
-                       <Icon1 name= "ios-person" color={color} size={24} />
+                       <Icon1 name= "ios-person" color={color} size={28} />
                     )
                 }} />
             </Tab.Navigator>

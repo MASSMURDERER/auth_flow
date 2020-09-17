@@ -3,30 +3,59 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Button,
+    Image
 } from "react-native";
 
 import firebase from "firebase"
 
+import Fire from '../Fire1'
+
 class ProfileScreen extends Component {
 
-    signOut =() => {
-        firebase
-            .auth()
-            .signOut()
-            .then(() => this.props.navigation.navigate('SignUp'))
-            .catch(error =>  this.setState({ errorMessage: error.message }))
+    state ={
+        user: {
+
+        }
     }
 
 
+    unsubscribe = null;
+
+    componentDidMount() {
+        const user = this.props.uid || Fire.shared.uid;
+
+        this.unsubscribe = Fire.shared.firestore
+        .collection("users")
+        .doc(user)
+        .onSnapshot(doc => {
+            this.setState({ user: doc.data() })
+        })
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
 
 
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={this.signOut} style={{backgroundColor:'dodgerblue',padding:7}}>
-                    <Text style={{color:'white'}}>LOGOUT</Text>
-                </TouchableOpacity>
+                <View style={{marginTop: 64, alignItems: 'center'}}>
+                    <View style={styles.avatarContainer}>
+                        <Image style={styles.avatar}
+                                source={
+                                    this.state.user.avatar
+                                    ? {uri : this.state.user.avatar}
+                                    : require("../assets/me.jpg")
+                                }/>
+                    </View>
+                            <Text style={styles.name}>{this.state.user.name}</Text>
+                </View>
+                <View style={{padding:100}}>
+                <Button onPress={() => {Fire.shared.signOut()}} title="Logout" />
+                </View>
             </View>
         );
     }
@@ -36,8 +65,20 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor:'white'
+    },
+    avatarContainer: {
+        shadowColor: '#151734',
+        shadowRadius: 15,
+        shadowOpacity: 0.4
+    },
+    avatar: {
+        width: 136,
+        height: 136,
+        borderRadius: 68
+    },
+    name: {
+        marginTop: 24,
+        fontSize: 16,
+        fontWeight: "bold"
     }
 });
