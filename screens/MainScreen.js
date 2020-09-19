@@ -10,7 +10,8 @@ import {createStackNavigator} from '@react-navigation/stack'
 import Icon1 from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome5'
 import Icon3 from 'react-native-vector-icons/Entypo'
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import ExploreScreen from '../component/ExploreScreen'
 import Details from "../ExploreScreen/Details";
@@ -20,24 +21,28 @@ import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
 import NewsScreen from '../component/NewsScreen'
 import ProfileScreen from '../component/ProfileScreen'
+import CameraScreen from '../component/CameraScreen'
 
 const ExploreStackScreen = ({navigation}) => {
     return(
     <ExploreStack.Navigator screenOptions={{headerTitleStyle: {
-        paddingLeft:68
+        paddingLeft:66,color:'dodgerblue',justifyContent:'center'
     }}}>
         <ExploreStack.Screen name="Home" component={ExploreScreen} options={{
             headerRight: () => (
                 <Button onPress={() => navigation.navigate('Inbox')} transparent>
-                <Icon style={{color:"dodgerblue",fontSize:30}} name="ios-chatboxes" />
+                <Icon style={{color:"dodgerblue",fontSize:28,marginTop:7}} name="ios-rocket" />
                 </Button>
             ),
             headerTitle: "Moments",
             headerLeft: () => (
-                <Icon style={{color:"dodgerblue",paddingLeft:10,fontSize:36}} name='ios-camera' />
+                <Button onPress={() => navigation.navigate('Camera')} transparent>
+                <Icon style={{color:"dodgerblue",fontSize:32,marginTop:7}} name='md-aperture' />
+                </Button>
             )
         }}/>
         <ExploreStack.Screen name="Inbox" component={InboxScreen} />
+        <ExploreStack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}} />
         <ExploreStack.Screen name="Details" component={Details} />
     </ExploreStack.Navigator>
     )
@@ -84,14 +89,14 @@ const ProfileStackScreen = () => {
 class MainScreen extends Component {
     render() {
         return (
-            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'dodgerblue', inactiveTintColor:'grey', showLabel: false}}>
+            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'dodgerblue', inactiveTintColor:'black', showLabel: false, keyboardHidesTabBar: true}}>
 
                 <Tab.Screen name='Home' 
                 component={ExploreStackScreen}
                 options={{
                     tabBarColor: 'red',
                     tabBarIcon:({color,size}) => (
-                       <Icon3 name = "home" color={color} size={26} />
+                       <Icon3 name = "home" color={color} size={28} />
                     )
                 }} />
                 <Tab.Screen name='News' 
@@ -99,7 +104,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor: 'black',
                     tabBarIcon:({color,size}) => (
-                       <Icon2 name= "newspaper" color={color} size={26} />
+                       <MaterialCommunityIcons name= "newspaper" color={color} size={30} />
                     )
                 }} />
                 <Tab.Screen name='Post' 
@@ -107,7 +112,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor:'blue',
                     tabBarIcon:({color,size}) => (
-                       <Icon1 name = "ios-add-circle" color={color} size={70} style={{marginBottom:50}} />
+                       <Icon1 name = "ios-add-circle" color={color} size={50}  />
                     ),
                 }} />
                 <Tab.Screen name='Notifications'
@@ -115,7 +120,7 @@ class MainScreen extends Component {
                  options={{
                     tabBarColor: 'purple',
                      tabBarIcon:({color,size}) => (
-                         <Icon1 name = "ios-heart" color={color} size={28} />
+                         <Ionicons name = "ios-flash" color={color} size={30} />
                      )
                  }} />
                 <Tab.Screen name='Profile' 
@@ -123,7 +128,7 @@ class MainScreen extends Component {
                 options={{
                     tabBarColor: 'black',
                     tabBarIcon:({color,size}) => (
-                       <Icon1 name= "ios-person" color={color} size={28} />
+                       <MaterialCommunityIcons name= "alien" color={color} size={34} />
                     )
                 }} />
             </Tab.Navigator>

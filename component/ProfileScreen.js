@@ -3,23 +3,18 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity,
     Button,
     Image
 } from "react-native";
 
-import firebase from "firebase"
-
 import Fire from '../Fire1'
+
 
 class ProfileScreen extends Component {
 
     state ={
-        user: {
-
-        }
+        user: {},
     }
-
 
     unsubscribe = null;
 
@@ -48,7 +43,7 @@ class ProfileScreen extends Component {
                                 source={
                                     this.state.user.avatar
                                     ? {uri : this.state.user.avatar}
-                                    : require("../assets/me.jpg")
+                                    : require("../assets/alien.jpg")
                                 }/>
                     </View>
                             <Text style={styles.name}>{this.state.user.name}</Text>
@@ -65,6 +60,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'white'
     },
     avatarContainer: {
         shadowColor: '#151734',
@@ -80,5 +76,14 @@ const styles = StyleSheet.create({
         marginTop: 24,
         fontSize: 16,
         fontWeight: "bold"
-    }
+    },
+    border: {
+        width: 200,
+        margin: 10,
+        padding: 15,
+        fontSize: 16,
+        borderColor: '#d3d3d3',
+        borderBottomWidth: 1,
+        textAlign: 'center'
+      },
 });

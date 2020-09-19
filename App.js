@@ -2,11 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 
-
-
-
 import * as firebase from 'firebase'
-
 
 import SignUpScreen from './screens/SignUpScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -85,7 +81,6 @@ function shouldHeaderBeShown(route){
       return false  
   }
 }
-
 
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
