@@ -7,6 +7,8 @@ import {
     Image
 } from "react-native";
 
+import Fire from '../Fire1'
+
 import * as firebase from "firebase"
 
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -16,85 +18,50 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 import {Icon,Button} from 'native-base'
 
-posts= [
-    {
-        id: "1",
-        name: "__v.j__",
-        text:"Great job! I am a designer and I'm learning a lot with your tutorials. Thank you :) I am very excited to see the app getting the feed from Firebase.",
-        timestamp: 1600319825909,
-        avatar: require("../assets/me.jpg"),
-        image: 'https://firebasestorage.googleapis.com/v0/b/auth-flow-ccd4a.appspot.com/o/photos%2FtR0rk4oD8BM1sKLX6t4va1IDtkj1%2F1600281315917.jpg?alt=media&token=4d2378fa-5002-48fd-9409-5bf6efc6fef3'
-    },
-]
 
 class ExploreScreen extends Component {
 
     state = {
-        posts: []
-    }
-
-    constructor(props) {
-        super (props);
-        this.subscriber = firebase.firestore().collection('posts')
-        .onSnapshot(docs => {
-            let posts = []
-            docs.forEach(doc => {
-                posts.push(doc.data())
-            })
-            this.setState({ posts })
-        })
-    }
-
-    onPostLike= (postId) => {
-        // Create a reference to the post
-        const postReference = firebase.firestore().doc(`posts/${'37KDcwID0cejvy3lWwTb'}`);
-      
-        return firebase.firestore().runTransaction(async transaction => {
-          // Get post data first
-          const postSnapshot = await transaction.get(postReference);
-      
-          if (!postSnapshot.exists) {
-            throw 'Post does not exist!';
-          }
-      
-          await transaction.update(postReference, {
-            likes: postSnapshot.data().likes + 1,
-          });
-        });
-      }
+        latestPost: [],
+        }
+     
+     displayLatestPost = (latestPost) => {
+         this.setState({latestPost: latestPost});
+         console.log("latest Post " + this.state.latestPost);
+     }
+     
+     componentDidMount(){
+        Fire.shared.getPosts(this.displayLatestPost);
+        console.log("This is the displayLatestPost " + this.state.latestPost);
+        
+     }
       
 
-    renderPost = post => {
+    renderLatestPost = (post) => {
         return(
             <View style={styles.feedItem}>
+                
                <View style={{flex:1}}>
-                   <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
-                       <View>
-                       </View>
-
                        
-                   </View>
-
-
-                    {this.state.posts.map((post,index) => <View key={index}>
+                    <View style={{flexDirection: 'row'}}>    
+                    <Image source={post.avatar ? {uri: post.avatar} : require('../assets/alien.jpg')} style={styles.avatar}></Image>
+                        <Text style={styles.name}>{post.name}</Text>
+                    </View>
                         
                 <Text style={styles.timestamp}>{moment(post.timestamp).fromNow()}</Text>
 
                 <Image source={{uri:post.image}} style={styles.postImage} resizeMode='cover'/>
                 
-                <Text style={styles.posts}>{post.text}</Text>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection:'row',marginLeft:10}}>
                     <Button onPress={this.onPostLike} transparent>
-                    <FontAwesome name="thumbs-o-up" size={24} color="dodgerblue" style={{marginRight: 16,marginTop:3}} />
+                    <FontAwesome name="thumbs-o-up" size={28} color="dodgerblue" style={{marginRight: 16,marginTop:1}} />
                     </Button>
-                    <Ionicons name="ios-chatbubbles" size={24} color="dodgerblue" style={{marginRight: 16,marginTop:10}} />
-                    <Ionicons name="ios-more" size={24} color="dodgerblue" style={{marginTop:10}}/>
+                    <Ionicons name="ios-chatbubbles" size={30} color="dodgerblue" style={{marginRight: 16,marginTop:10}} />
+                    <Ionicons name="ios-more" size={30} color="dodgerblue" style={{marginTop:10}}/>
                     </View>
-                <Text style={{marginTop:5}}>{post.likes} likes</Text>
-                </View>)}
-
-                <View style={{flexDirection: 'row'}}>
-                    
+                    <Text style={{marginLeft:10,fontWeight:'bold'}}>{post.name}</Text>
+                <View style={{marginLeft:10,marginBottom:30}}>
+                <Text style={styles.posts}>{post.text}</Text>
                 </View>
                 </View>
             </View>
@@ -105,7 +72,13 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <FlatList style={styles.feed} data={posts} renderItem={({item}) => this.renderPost(item)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false} />
+                <FlatList style={styles.feed} data={this.state.latestPost} renderItem={({item, index}) => this.renderLatestPost(item, index)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false}>
+                <View >
+                        <Button transparent >
+                            <Icon name='ios-search' size={24} />
+                        </Button>
+                       </View>
+                </FlatList>
             </View>            
         );
     }
@@ -123,30 +96,31 @@ const styles = StyleSheet.create({
         backgroundColor:'white'
     },
     feed: {
-        marginHorizontal: 16
+        marginTop:10
     },
     feedItem:{
       backgroundColor: 'white',
       borderRadius:5,
       padding: 8,
       flexDirection: 'row',
-      marginVertical: 8  
     },
     avatar: {
-       width: 36,
-       height: 36,
+       width: 38,
+       height: 38,
        borderRadius: 18,
-       marginRight: 16 
+       marginRight: 16, 
     },
     name: {
         fontSize: 15,
-        fontWeight: "500",
-        color: 'black'
+        fontWeight: "bold",
+        color: 'black',
+        flexDirection:'row',
     },
     timestamp: {
         fontSize: 11,
         color: '#C4C6CE',
-        marginTop:4
+        marginLeft:55,
+        top:-14
     },
     post: {
         marginTop: 16,
@@ -156,7 +130,8 @@ const styles = StyleSheet.create({
     postImage: {
         width: undefined,
         height: 350,
-        borderRadius: 10,
-        marginVertical: 16
+        borderRadius:20,
+        marginVertical: 1,
+        justifyContent:'center',
     }
 });

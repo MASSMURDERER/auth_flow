@@ -2,15 +2,33 @@ import * as firebase from 'firebase'
 
 
 class Fire {
+
+    getPosts = async (displayLatestPost) => {
+        const post = await 
     
-    addPost = async ({text, localUri}) => {
+    this.firestore.collection('posts').orderBy('timestamp', 'desc').get()
+        
+        let postArray =[]
+        post.forEach((post) => {
+            
+            postArray.push({id: post.id, ...post.data()})
+        })
+    
+      displayLatestPost(postArray)  
+    }
+    
+    addPost = async ({text, localUri, name, avatar}) => {
         const remoteUri = await this.uploadPhotoAsync(localUri, `photos/${this.uid}/${Date.now()}`)
+
+        
 
         return new Promise((res,rej) => {
             this.firestore.collection("posts").add({
                 text,
+                name,
+                avatar,
                 uid: this.uid,
-                timestamp: this.timestamp,
+                timestamp:this.timestamp,
                 image: remoteUri
             })
             .then(ref => {
@@ -51,13 +69,13 @@ class Fire {
             let db = this.firestore.collection("users").doc(this.uid)
 
             db.set({
-                name:user.name,
+                name: user.name,
                 email: user.email,
                 avatar: null
             })
 
             if (user.avatar) {
-                remoteUri = await this.uploadPhotoAsync(user.avatar, `avatar/${this.uid}`)
+                remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`)
 
                 db.set({avatar: remoteUri}, {merge: true})
             }
@@ -65,6 +83,7 @@ class Fire {
             alert("Error: ",error);
         }
     }
+
 
     signOut = () => {
         firebase.auth().signOut()
@@ -81,7 +100,6 @@ class Fire {
     get timestamp() {
         return Date.now()
     }
-
 }
 
 Fire.shared = new Fire()
