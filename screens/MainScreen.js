@@ -21,23 +21,29 @@ import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
 import NewsScreen from '../component/NewsScreen'
 import ProfileScreen from '../component/ProfileScreen'
+import EditAvatarScreen from '../ProfileScreen/EditAvatarScreen'
+import GalleryScreen from '../ProfileScreen/GalleryScreen'
 import CameraScreen from '../component/CameraScreen'
+import Gallery from "../component/Gallery";
 
 const ExploreStackScreen = ({navigation}) => {
     return(
     <ExploreStack.Navigator screenOptions={{headerTitleStyle: {
-        paddingLeft:66,color:'dodgerblue',justifyContent:'center'
+        marginLeft:66,color:'white'
     }}}>
         <ExploreStack.Screen name="Home" component={ExploreScreen} options={{
+            headerStyle:{
+                backgroundColor:'black'
+            },
             headerRight: () => (
                 <Button onPress={() => navigation.navigate('Inbox')} transparent>
-                <Icon style={{color:"dodgerblue",fontSize:28,marginTop:7}} name="ios-rocket" />
+                <Icon style={{color:"white",fontSize:28,marginTop:7}} name="ios-rocket" />
                 </Button>
             ),
             headerTitle: "Moments",
             headerLeft: () => (
                 <Button onPress={() => navigation.navigate('Camera')} transparent>
-                <Icon style={{color:"dodgerblue",fontSize:32,marginTop:7}} name='md-aperture' />
+                <Icon style={{color:"white",fontSize:32,marginTop:7}} name='md-aperture' />
                 </Button>
             )
         }}/>
@@ -77,8 +83,10 @@ const PostStackScreen = () => {
 
 const ProfileStackScreen = () => {
     return(
-    <ProfileStack.Navigator>
+    <ProfileStack.Navigator screenOptions={{headerTitleStyle: {color:'white'}}}>
         <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
+        <ProfileStack.Screen name="EditAvatar" component={EditAvatarScreen} options={{headerStyle:{backgroundColor:"black"}}}/>
+        <ProfileStack.Screen name="MyGallery" component={GalleryScreen} options={{headerStyle:{backgroundColor:"black"}}}/>
     </ProfileStack.Navigator>
     )
 }
@@ -89,7 +97,7 @@ const ProfileStackScreen = () => {
 class MainScreen extends Component {
     render() {
         return (
-            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'dodgerblue', inactiveTintColor:'black', showLabel: false, keyboardHidesTabBar: true}}>
+            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'red',inactiveTintColor:'white',activeBackgroundColor:"black", showLabel: false, keyboardHidesTabBar: true,inactiveBackgroundColor:'black'}}>
 
                 <Tab.Screen name='Home' 
                 component={ExploreStackScreen}
@@ -120,7 +128,7 @@ class MainScreen extends Component {
                  options={{
                     tabBarColor: 'purple',
                      tabBarIcon:({color,size}) => (
-                         <Ionicons name = "ios-flash" color={color} size={30} />
+                         <Ionicons name = "ios-flash" color={color} size={32} />
                      )
                  }} />
                 <Tab.Screen name='Profile' 
