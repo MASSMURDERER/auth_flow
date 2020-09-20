@@ -3,19 +3,51 @@ import * as firebase from 'firebase'
 
 class Fire {
 
-    getPosts = async (displayLatestPost) => {
-        const post = await 
-    
-    this.firestore.collection('posts').orderBy('timestamp', 'desc').get()
-        
-        let postArray =[]
-        post.forEach((post) => {
-            
-            postArray.push({id: post.id, ...post.data()})
-        })
-    
-      displayLatestPost(postArray)  
-    }
+    getUserPosts = () => {
+        let user = firebase.auth().currentUser
+        return firebase
+          .firestore()
+          .collection('posts')
+          .where('uid', '==', user.uid)
+          .get()
+          .then(function(querySnapshot) {
+            let posts = querySnapshot.docs.map(doc => doc.data())
+            return posts
+          })
+          .catch(function(error) {
+            console.log('Error getting documents: ', error)
+          })
+      }
+
+      getUserDetails = () => {
+        let user = firebase.auth().currentUser
+        return firebase
+          .firestore()
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then(function(doc) {
+            let userDetails = doc.data()
+            return userDetails
+          })
+          .catch(function(error) {
+            console.log('Error getting documents: ', error)
+          })
+      }
+
+      uploadAvatar = avatarImage => {
+        let user = firebase.auth().currentUser
+      
+        return firebase
+          .firestore()
+          .collection('users')
+          .doc(user.uid)
+          .update({
+            avatar: avatarImage
+          })
+      }
+
+
     
     addPost = async ({text, localUri, name, avatar}) => {
         const remoteUri = await this.uploadPhotoAsync(localUri, `photos/${this.uid}/${Date.now()}`)
@@ -29,7 +61,8 @@ class Fire {
                 avatar,
                 uid: this.uid,
                 timestamp:this.timestamp,
-                image: remoteUri
+                image: remoteUri,
+                likes: []
             })
             .then(ref => {
                 res(ref)
@@ -63,6 +96,12 @@ class Fire {
     createUser = async user => {
         let remoteUri = null
 
+
+        if(user.name.length < 4) {
+            alert("Please enter atleast 4 characters")
+            return;
+          }
+
         try{
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
 
@@ -71,8 +110,10 @@ class Fire {
             db.set({
                 name: user.name,
                 email: user.email,
+                password: user.password,
                 avatar: null
             })
+            
 
             if (user.avatar) {
                 remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`)
@@ -80,9 +121,31 @@ class Fire {
                 db.set({avatar: remoteUri}, {merge: true})
             }
         } catch(error) {
-            alert("Error: ",error);
+            alert(error);
         }
     }
+
+    updateProfile = async user => {
+        let remoteUri = null;
+        
+        try {
+            let db = this.firestore.collection("users").doc(this.uid);
+           
+        
+            db.update({
+              avatar: user.avatar
+            });
+        
+            if (user.avatar) {
+                remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`);
+        
+                db.set({ avatar: remoteUri }, { merge: true });
+            }
+        } catch (error) {
+            alert("Error: ", error);
+        }  
+        
+        }
 
 
     signOut = () => {

@@ -7,18 +7,26 @@ import {
     Image
 } from "react-native";
 
-import Fire from '../Fire1'
 
+import Fire from '../Fire1'
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 class ProfileScreen extends Component {
 
     state ={
         user: {},
+        images: [],
+        userDetails:{},
     }
 
     unsubscribe = null;
 
     componentDidMount() {
+
+        this.fetchUserDetails()
+
+        this.fetchPosts()
+
         const user = this.props.uid || Fire.shared.uid;
 
         this.unsubscribe = Fire.shared.firestore
@@ -33,23 +41,58 @@ class ProfileScreen extends Component {
         this.unsubscribe();
     }
 
+    fetchPosts = async () => {
+        try {
+          const posts = await Fire.shared.getUserPosts()
+          let images = posts.map(item => {
+            return item.image
+          })
+      
+          this.setState({ images })
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      fetchUserDetails = async () => {
+        try {
+          const userDetails = await Fire.shared.getUserDetails()
+          this.setState({ userDetails })
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
 
     render() {
+        const { images, userDetails } = this.state
         return (
             <View style={styles.container}>
                 <View style={{marginTop: 64, alignItems: 'center'}}>
                     <View style={styles.avatarContainer}>
                         <Image style={styles.avatar}
-                                source={
-                                    this.state.user.avatar
-                                    ? {uri : this.state.user.avatar}
-                                    : require("../assets/alien.jpg")
+                                source={this.state.user.avatar
+                                    ? {uri:this.state.user.avatar}
+                                    : require('../assets/alien.jpg')
                                 }/>
                     </View>
-                            <Text style={styles.name}>{this.state.user.name}</Text>
                 </View>
-                <View style={{padding:100}}>
+                
+                <View style={{padding:110,top:-50,left:10,flexDirection:'row',justifyContent:"center",marginVertical:10}}>
+                <View style={{marginRight:30}}>
                 <Button onPress={() => {Fire.shared.signOut()}} title="Logout" />
+                </View>
+                <View>
+                <Button title="Edit Profile" onPress={() => this.props.navigation.navigate('EditAvatar')} />
+                </View>
+                </View>
+                <View style={{justifyContent: 'center',alignItems:'center', top:-250}}>
+                    <Text style={styles.name}>{this.state.user.name}</Text>
+                </View>
+                <View style={{alignItems:'center',top:-150}}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('MyGallery') }>
+                    <Text style={{color:'#33B0FF',fontWeight:'bold',fontSize:17}}>My Gallery</Text>
+                </TouchableOpacity>
                 </View>
             </View>
         );
@@ -60,7 +103,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'white'
+        backgroundColor:'black'
     },
     avatarContainer: {
         shadowColor: '#151734',
@@ -73,9 +116,9 @@ const styles = StyleSheet.create({
         borderRadius: 68
     },
     name: {
-        marginTop: 24,
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color:'white'
     },
     border: {
         width: 200,

@@ -74,23 +74,21 @@ class PostScreen extends Component {
                       <Ionicons name='md-arrow-back' size={24} color="#D8D9DB"></Ionicons>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={this.handlePost}>
-                      <Text style={{ fontWeight:'bold', fontSize:17 }}>Post</Text>
+                      <Text style={{ fontWeight:'bold', fontSize:17, color:'white' }}>Post</Text>
                   </TouchableOpacity>
               </View>
                 
-              <Text>{ this.state.user.name }</Text>
               <View style={styles.inputContainer}>
                   <Image source={this.state.user.avatar
-                                    ? {uri : this.state.user.avatar}
-                                    : require("../assets/alien.jpg")
-                                } style={styles.avatar}></Image>
-                  <TextInput autoFocus={true} multiline={true} numberOfLines={4} style={{flex:1}} placeholder="Anything on your mind?" placeholderTextColor='black' onChangeText={text => this.setState({text})} value={this.state.text}></TextInput>
+                                ? {uri: this.state.user.avatar}
+                                : require('../assets/alien.jpg')} style={styles.avatar}></Image>
+                  <TextInput autoFocus={true} multiline={true} numberOfLines={4} style={{flex:1,color:'white'}} placeholder="Share your Moments..." placeholderTextColor='white' onChangeText={text => this.setState({text})} value={this.state.text}></TextInput>
               </View>
               <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
-                <Ionicons name='ios-camera' size={36} color='black'></Ionicons>
+                <Ionicons name='ios-camera' size={36} color='white'></Ionicons>
               </TouchableOpacity>
               <View style={{marginHorizontal: 32, marginTop: 32, height: 150}}>
-                <Image source={{uri: this.state.image}} style={{width: "100%",height:'100%'}}></Image>
+                <Image source={{uri: this.state.image}} style={{width: 300,height:300}}></Image>
               </View>
           </SafeAreaView>  
         );
@@ -101,7 +99,7 @@ export default PostScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'white'
+        backgroundColor:'black'
     },
     header: {
         flexDirection: 'row',
@@ -123,6 +121,7 @@ const styles = StyleSheet.create({
     },
     photo: {
         alignItems:'flex-end',
-        marginHorizontal:32
+        marginHorizontal:32,
+        top:-10
     }
 });
