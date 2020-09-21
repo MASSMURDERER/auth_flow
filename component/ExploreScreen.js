@@ -44,7 +44,7 @@ class ExploreScreen extends Component {
                 
                <View style={{flex:1}}>  
                     <View style={{flexDirection: 'row'}}>    
-                    <Image source={post.avatar ? {uri: post.avatar} : require('../assets/alien.jpg')} style={styles.avatar}></Image>
+                    <Image source={{uri:post.avatar}} style={styles.avatar}></Image>
                         <Text style={styles.name}>{post.name}</Text>
                     </View>
                         
@@ -56,7 +56,7 @@ class ExploreScreen extends Component {
                     <Button onPress={this.onPostLike} transparent>
                     <MaterialCommunityIcons name="alien" size={32} color="white" style={{marginRight: 16,marginTop:1}} />
                     </Button>
-                    <Ionicons name="ios-chatbubbles" size={30} color="white" style={{marginRight: 16,marginTop:10}} />
+                    <Ionicons name="ios-chatboxes" size={30} color="white" style={{marginRight: 16,marginTop:10}} />
                     <Ionicons name="ios-more" size={30} color="white" style={{marginTop:10}}/>
                     </View>
                     <Text style={{marginLeft:10,fontWeight:'bold',color:'white'}}>{post.name}</Text>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     },
     postImage: {
         width: undefined,
-        height: 250,
+        height: 330,
         justifyContent:'center',
     }
 });

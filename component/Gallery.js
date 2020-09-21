@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     images: {
       flexDirection: 'row',
       paddingHorizontal: 0.5,
-      top:-170
     },
     header: {
       flexDirection: 'row',
