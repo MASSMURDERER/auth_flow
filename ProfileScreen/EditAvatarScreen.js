@@ -38,11 +38,6 @@ componentWillUnmount() {
     this.unsubscribe();
 }
 
-
-handleUpdate = () => {
-  Fire.shared.updateProfile(this.state.updatedUser);
- };
-
   handlePickAvatar = async () => {
  UserPermissions.getCameraPermission();
 
@@ -53,9 +48,10 @@ let result = await ImagePicker.launchImageLibraryAsync({
 });
 
 if (!result.cancelled) {
-   this.setState({ updatedUser: { ...this.state.updatedUser, avatar: result.uri 
-} });
+   this.setState({ updatedUser: { ...this.state.updatedUser, avatar: result.uri } });
+   this.props.navigation.navigate('Profile')
 }
+Fire.shared.updateProfile(this.state.updatedUser);
 };
     
       render() {
@@ -64,19 +60,13 @@ if (!result.cancelled) {
             <View style={{marginTop: 64, alignItems: 'center'}}>
                     <TouchableOpacity style={styles.avatarContainer} onPress={this.handlePickAvatar}>
                         <Image style={styles.avatar}
-                                source={this.state.user.avatar
-                                    ? {uri:this.state.user.avatar}
-                                    : require('../assets/alien.jpg')
-                                }/>
+                                source={{uri:this.state.user.avatar}}/>
                                 <MaterialIcons 
                      name="photo-camera" 
                      size={40} color="grey" 
                      style={{ marginTop: 6, marginLeft: 2 }} 
                      />  
                     </TouchableOpacity>
-               <TouchableOpacity onPress={this.handleUpdate}>
-                <MaterialIcons name="check" size={24} color="white" />
-                </TouchableOpacity>
                 </View>
           </View>
         )

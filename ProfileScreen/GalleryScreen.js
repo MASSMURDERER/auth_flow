@@ -37,7 +37,7 @@ class GalleryScreen extends Component {
         const { images } = this.state
         return (
             <View style={styles.container}>
-                <View style={{top:50}}>
+                <View>
                 <Gallery items={images}/>
                 </View>
             </View>
@@ -49,8 +49,6 @@ export default GalleryScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'black'
     }
 });
