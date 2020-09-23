@@ -60,7 +60,7 @@ Fire.shared.updateProfile(this.state.updatedUser);
             <View style={{marginTop: 64, alignItems: 'center'}}>
                     <TouchableOpacity style={styles.avatarContainer} onPress={this.handlePickAvatar}>
                         <Image style={styles.avatar}
-                                source={{uri:this.state.user.avatar}}/>
+                                source={this.state.user.avatar ? {uri:this.state.user.avatar} : require('../assets/alien.jpg')}/>
                                 <MaterialIcons 
                      name="photo-camera" 
                      size={40} color="grey" 

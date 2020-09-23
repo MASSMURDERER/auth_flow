@@ -1,5 +1,5 @@
 import * as firebase from 'firebase'
-
+import User from './User'
 
 class Fire {
 
@@ -49,7 +49,7 @@ class Fire {
 
 
     
-    addPost = async ({text, localUri, name, avatar}) => {
+    addPost = async ({text, localUri, displayName, avatar}) => {
         const remoteUri = await this.uploadPhotoAsync(localUri, `photos/${this.uid}/${Date.now()}`)
 
         
@@ -57,12 +57,12 @@ class Fire {
         return new Promise((res,rej) => {
             this.firestore.collection("posts").add({
                 text,
-                name,
+                displayName,
                 avatar,
                 uid: this.uid,
                 timestamp:this.timestamp,
                 image: remoteUri,
-                likes: []
+                likes: null
             })
             .then(ref => {
                 res(ref)
@@ -97,18 +97,28 @@ class Fire {
         let remoteUri = null
 
 
-        if(user.name.length < 4) {
+        if(user.displayName.length < 4) {
             alert("Please enter atleast 4 characters")
             return;
           }
 
+          if(user.phoneNumber.length < 10) {
+            alert("Invalid Number")
+            return;
+          } 
+
         try{
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
 
+            firebase.database().ref('users/' + user.phoneNumber).set({name: user.displayName})
+            User.phone = user.phoneNumber
+
+            
             let db = this.firestore.collection("users").doc(this.uid)
 
             db.set({
-                name: user.name,
+                displayName: user.displayName,
+                phoneNumber: user.phoneNumber,
                 email: user.email,
                 password: user.password,
                 avatar: null

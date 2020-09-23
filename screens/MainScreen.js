@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { 
-    StyleSheet
+    StyleSheet,
+    Text
 } from "react-native";
 
 import {Button,Icon} from 'native-base'
@@ -16,6 +17,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ExploreScreen from '../component/ExploreScreen'
 import Details from "../ExploreScreen/Details";
 import InboxScreen from '../component/InboxScreen'
+import ChatScreen from '../InboxScreen/ChatScreen'
 import PostScreen from '../component/PostScreen'
 import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
@@ -26,10 +28,10 @@ import GalleryScreen from '../ProfileScreen/GalleryScreen'
 import CameraScreen from '../component/CameraScreen'
 import Gallery from "../component/Gallery";
 
-const ExploreStackScreen = ({navigation}) => {
+const ExploreStackScreen = ({navigation, route}) => {
     return(
     <ExploreStack.Navigator screenOptions={{headerTitleStyle: {
-        marginLeft:66,color:'white'
+        paddingLeft:66,color:'black'
     }}}>
         <ExploreStack.Screen name="Home" component={ExploreScreen} options={{
             headerStyle:{
@@ -42,12 +44,15 @@ const ExploreStackScreen = ({navigation}) => {
             ),
             headerTitle: "Moments",
             headerLeft: () => (
-                <Button onPress={() => navigation.navigate('Camera')} transparent>
-                <Icon style={{color:"white",fontSize:32,marginTop:7}} name='md-aperture' />
+                <Button onPress={() => navigation.navigate('Notifications')} transparent>
+                <Icon style={{color:"white",fontSize:32,marginTop:7}} name='ios-notifications' />
                 </Button>
             )
         }}/>
-        <ExploreStack.Screen name="Inbox" component={InboxScreen} />
+        <ExploreStack.Screen name="Inbox" component={InboxScreen} options={{
+            headerTitle: "Inbox"
+        }}/>
+        <ExploreStack.Screen name="Chat" component={ChatScreen} options={({route}) => ({title: route.params.user.displayName})}/>
         <ExploreStack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}} />
         <ExploreStack.Screen name="Details" component={Details} />
     </ExploreStack.Navigator>

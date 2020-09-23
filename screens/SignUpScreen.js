@@ -17,11 +17,14 @@ import UserPermissions from '../UserPermissions'
 
 import * as ImagePicker from 'expo-image-picker'
 
+import User from '../User'
+
 class SignUpScreen extends Component {
   
   state = {
     user: {
-     name:'',
+     displayName:'',
+     phoneNumber: null,
      email: '',
      password: '',
      avatar: null
@@ -45,6 +48,7 @@ class SignUpScreen extends Component {
 
     handleName = () => {
       Fire.shared.createUser(this.state.user)
+      User.phone = this.state.user.phoneNumber
       }
 
 
@@ -75,9 +79,16 @@ class SignUpScreen extends Component {
           placeholder="Username"
           placeholderTextColor='grey'
           style={styles.textInput}
-          onChangeText={name => this.setState({ user: { ...this.state.user, name } })}
-          value={this.state.name}
-        />  
+          onChangeText={displayName => this.setState({ user: { ...this.state.user, displayName } })}
+          value={this.state.displayName}
+        />
+        <TextInput
+          placeholder="phoneNumber"
+          placeholderTextColor='grey'
+          style={styles.textInput}
+          onChangeText={phoneNumber => this.setState({ user: { ...this.state.user, phoneNumber } })}
+          value={this.state.phoneNumber}
+        />    
         <TextInput
           placeholder="Email"
           placeholderTextColor='grey'

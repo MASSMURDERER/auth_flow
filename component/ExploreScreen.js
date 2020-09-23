@@ -36,6 +36,26 @@ class ExploreScreen extends Component {
                 this.setState({ posts })
             })
         }
+
+        onPostLike = (postId) => {
+            // Create a reference to the post
+            const postReference = firebase.firestore().doc(`posts/${"sEcy25LtIzon6jinyfJY"}`);
+          
+            return firebase.firestore().runTransaction(async transaction => {
+              // Get post data first
+              const postSnapshot = await transaction.get(postReference);
+          
+              if (!postSnapshot.exists) {
+                throw 'Post does not exist!';
+              }
+          
+              await transaction.update(postReference, {
+                likes: postSnapshot.data().likes + 1
+              });
+            });
+          }
+          
+
      
       
     renderLatestPost = (post) => {
@@ -45,7 +65,7 @@ class ExploreScreen extends Component {
                <View style={{flex:1}}>  
                     <View style={{flexDirection: 'row'}}>    
                     <Image source={{uri:post.avatar}} style={styles.avatar}></Image>
-                        <Text style={styles.name}>{post.name}</Text>
+                        <Text style={styles.name}>{post.displayName}</Text>
                     </View>
                         
                 <Text style={styles.timestamp}>{moment(post.timestamp).fromNow()}</Text>
@@ -59,7 +79,8 @@ class ExploreScreen extends Component {
                     <Ionicons name="ios-chatboxes" size={30} color="white" style={{marginRight: 16,marginTop:10}} />
                     <Ionicons name="ios-more" size={30} color="white" style={{marginTop:10}}/>
                     </View>
-                    <Text style={{marginLeft:10,fontWeight:'bold',color:'white'}}>{post.name}</Text>
+                    <Text style={{color:'white'}}>{post.likes}</Text>
+                    <Text style={{marginLeft:10,fontWeight:'bold',color:'white'}}>{post.displayName}</Text>
                 <View style={{marginLeft:10,marginBottom:30}}>
                 <Text style={{color:'white'}}>{post.text}</Text>
                 </View>
@@ -72,12 +93,7 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <FlatList style={styles.feed} data={this.state.posts} renderItem={({item, post}) => this.renderLatestPost(item, post)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false}>
-                <View >
-                        <Button transparent >
-                            <Icon name='ios-search' size={24} />
-                        </Button>
-                       </View>
+                <FlatList style={styles.feed} data={this.state.posts} renderItem={({post, index}) => this.renderLatestPost(post, index)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false}>
                 </FlatList>
             </View>            
         );
@@ -128,7 +144,7 @@ const styles = StyleSheet.create({
     },
     postImage: {
         width: undefined,
-        height: 330,
+        height: 360,
         justifyContent:'center',
     }
 });

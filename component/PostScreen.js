@@ -12,6 +12,8 @@ import UserPermissions from '../UserPermissions'
 import * as ImagePicker from 'expo-image-picker';
 import Fire from '../Fire1'
 
+import {Icon, Button} from 'native-base'
+
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const firebase = require("firebase");
@@ -23,7 +25,7 @@ class PostScreen extends Component {
 
         },
         text: "",
-        image: null
+        image: null,
     }
 
     unsubscribe = null
@@ -47,8 +49,8 @@ class PostScreen extends Component {
 
 
     handlePost = () => {
-        Fire.shared.addPost({text: this.state.text.trim(), localUri: this.state.image, name: this.state.user.name, avatar: this.state.user.avatar}).then(ref => {
-            this.setState({text:'', image: null, name: this.state.user.name, avatar: this.state.user.avatar})
+        Fire.shared.addPost({text: this.state.text.trim(), localUri: this.state.image, displayName: this.state.user.displayName, avatar: this.state.user.avatar}).then(ref => {
+            this.setState({text:'', image: null, displayName: this.state.user.displayName, avatar: this.state.user.avatar})
         }).catch(error => {
             alert(error)
         })
@@ -58,7 +60,7 @@ class PostScreen extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3]
+            aspect: [1, 1]
         })
 
         if (!result.cancelled) {
@@ -86,6 +88,7 @@ class PostScreen extends Component {
               </View>
               <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
                 <Ionicons name='ios-camera' size={36} color='white'></Ionicons>
+                
               </TouchableOpacity>
               <View style={{marginHorizontal: 32, marginTop: 32, height: 150}}>
                 <Image source={{uri: this.state.image}} style={{width: 300,height:300}}></Image>
