@@ -7,16 +7,16 @@ import {
     Image
 } from "react-native";
 
-import Fire from '../Fire1'
-
 import * as firebase from 'firebase'
 
 import Ionicons from "react-native-vector-icons/Ionicons"
 import moment from "moment"
+import Fire from '../Fire1'
+import User from '../User'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import {Icon,Button} from 'native-base'
+import {Button} from 'native-base'
 
 
 class ExploreScreen extends Component {
@@ -36,15 +36,28 @@ class ExploreScreen extends Component {
                 this.setState({ posts })
             })
         }
+
+        componentDidMount() {
+            this.fetchUserDetails()
+        }
+
+        fetchUserDetails = async () => {
+            try {
+              const userDetails = await Fire.shared.getUserDetails()
+              this.setState({ userDetails })
+            } catch (error) {
+              console.log(error)
+            }
+            User.name = this.state.userDetails.name
+          }
      
-      
     renderLatestPost = (post) => {
         return(
             <View style={styles.feedItem}>
                 
                <View style={{flex:1}}>  
                     <View style={{flexDirection: 'row'}}>    
-                    <Image source={{uri:post.avatar}} style={styles.avatar}></Image>
+                    <Image source={post.avatar ? {uri:post.avatar} : require('../assets/alien.jpg')} style={styles.avatar}></Image>
                         <Text style={styles.name}>{post.name}</Text>
                     </View>
                         
@@ -52,16 +65,16 @@ class ExploreScreen extends Component {
 
                 <Image source={{uri:post.image}} style={styles.postImage} resizeMode='cover'/>
                 
-                <View style={{flexDirection:'row',marginLeft:10}}>
-                    <Button onPress={this.onPostLike} transparent>
-                    <MaterialCommunityIcons name="alien" size={32} color="white" style={{marginRight: 16,marginTop:1}} />
-                    </Button>
-                    <Ionicons name="ios-chatboxes" size={30} color="white" style={{marginRight: 16,marginTop:10}} />
-                    <Ionicons name="ios-more" size={30} color="white" style={{marginTop:10}}/>
+                <View style={{flexDirection:'row',marginLeft:15}}>
+                
+                    <MaterialCommunityIcons name="alien" size={30} color="black" style={{marginRight: 16,marginTop:7}} />
+                    
+                    <Ionicons name="ios-chatboxes" size={30} color="black" style={{marginRight: 16,marginTop:10}} />
+                    <Ionicons name="ios-more" size={30} color="black" style={{marginTop:10}}/>
                     </View>
-                    <Text style={{marginLeft:10,fontWeight:'bold',color:'white'}}>{post.name}</Text>
-                <View style={{marginLeft:10,marginBottom:30}}>
-                <Text style={{color:'white'}}>{post.text}</Text>
+                    <Text style={{marginLeft:19,fontWeight:'bold',color:'black'}}>{post.name}</Text>
+                <View style={{ marginLeft:19,marginBottom:30 }}>
+                <Text style={{color:'black',fontWeight:'900'}}>{post.text}</Text>
                 </View>
                 </View>
             </View>
@@ -72,12 +85,7 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <FlatList style={styles.feed} data={this.state.posts} renderItem={({item, post}) => this.renderLatestPost(item, post)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false}>
-                <View >
-                        <Button transparent >
-                            <Icon name='ios-search' size={24} />
-                        </Button>
-                       </View>
+                <FlatList style={styles.feed} data={this.state.posts} renderItem={({item, index}) => this.renderLatestPost(item, index)} keyExtractor={item => item.id} showsVerticalScrollIndicator={false}>
                 </FlatList>
             </View>            
         );
@@ -86,39 +94,35 @@ class ExploreScreen extends Component {
 export default ExploreScreen;
 
 
-
-
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'black'
+        backgroundColor:'white'
     },
     feed: {
         marginTop:10
     },
     feedItem:{
-      backgroundColor: 'black',
+      backgroundColor: 'white',
       flexDirection: 'row',
     },
     avatar: {
        width: 38,
        height: 38,
-       borderRadius: 18,
-       marginRight: 16,
+       borderRadius:18,
+       marginRight:7,
        marginLeft:10 
     },
     name: {
         fontSize: 15,
         fontWeight: "bold",
-        color: 'white',
+        color: 'black',
         flexDirection:'row',
     },
     timestamp: {
         fontSize: 11,
-        color: 'white',
-        marginLeft:65,
+        color: 'black',
+        marginLeft:55,
         top:-14
     },
     post: {
@@ -127,8 +131,11 @@ const styles = StyleSheet.create({
         color: '#838899'
     },
     postImage: {
-        width: undefined,
-        height: 330,
-        justifyContent:'center',
+        width: 350,
+        height: 350,
+        borderRadius:20,
+        marginLeft:5,
+        alignItems:'center',
+        justifyContent:'center'
     }
 });

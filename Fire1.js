@@ -1,4 +1,5 @@
 import * as firebase from 'firebase'
+import User from './User'
 
 
 class Fire {
@@ -96,30 +97,24 @@ class Fire {
     createUser = async user => {
         let remoteUri = null
 
-
-        if(user.name.length < 4) {
-            alert("Please enter atleast 4 characters")
-            return;
-          }
-
         try{
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
 
             let db = this.firestore.collection("users").doc(this.uid)
+            
 
             db.set({
-                name: user.name,
+                name:user.name,
                 email: user.email,
-                password: user.password,
                 avatar: null
             })
-            
 
             if (user.avatar) {
                 remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`)
 
                 db.set({avatar: remoteUri}, {merge: true})
             }
+            firebase.database().ref('users/' + user.name).set({name: user.name})
         } catch(error) {
             alert(error);
         }

@@ -7,7 +7,7 @@ import {
     Image
 } from "react-native";
 
-
+import User from '../User'
 import Fire from '../Fire1'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -61,11 +61,12 @@ class ProfileScreen extends Component {
         } catch (error) {
           console.log(error)
         }
+        User.name = this.state.userDetails.name
       }
 
 
     render() {
-        const { images, userDetails } = this.state
+        const { images } = this.state
         return (
             <View style={styles.container}>
                 <View style={{marginTop: 64, alignItems: 'center'}}>
@@ -87,7 +88,7 @@ class ProfileScreen extends Component {
                 </View>
                 </View>
                 <View style={{justifyContent: 'center',alignItems:'center', top:-250}}>
-                    <Text style={styles.name}>{this.state.user.name}</Text>
+                    <Text style={styles.name}>{User.name}</Text>
                 </View>
                 <View style={{alignItems:'center',top:-150}}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('MyGallery') }>
@@ -103,7 +104,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'black'
+        backgroundColor:'white'
     },
     avatarContainer: {
         shadowColor: '#151734',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: "bold",
-        color:'white'
+        color:'black'
     },
     border: {
         width: 200,

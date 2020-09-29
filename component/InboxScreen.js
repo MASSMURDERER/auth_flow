@@ -1,48 +1,69 @@
 import React, { Component } from "react";
 import { 
+    View,
+    Text,
     StyleSheet,
-    Platform,
-    KeyboardAvoidingView,
-    SafeAreaView
+    FlatList,
+    TouchableOpacity,
+    Image
 } from "react-native";
-import {GiftedChat} from 'react-native-gifted-chat'
-import Fire from "../Fire"
+
+import * as firebase from 'firebase'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 class InboxScreen extends Component {
 
     state = {
-        messages: []
+        users: []
     }
 
-    get user() {
-        return {
-            _id: Fire.uid
-        }
+    constructor(props) {
+        super(props);
+        this.subscriber = firebase.firestore().collection("users")
+        .onSnapshot(docs => {
+            let users= []
+            docs.forEach(doc => {
+                users.push(doc.data())
+            })
+            this.setState({ users })
+        })
     }
 
-    componentDidMount() {
-        Fire.get(message => this.setState(previous => ({
-            messages: GiftedChat.append(previous.messages, message)
-        })))
+    renderRow = (user) => {
+        return(
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Chat', {user})} 
+            style={{padding:10,borderBottomColor:'#ccc',borderBottomWidth:1,flexDirection:'row'}}>
+                <Image style={styles.avatar} source={{uri:user.avatar}}/>
+                <Text style={{color:'black',fontWeight:'bold',fontSize:17,marginTop:20,marginLeft:10}}>{user.name}</Text>
+            </TouchableOpacity>
+        )
     }
-
-    componentWillUnmount() {
-        Fire.off();
-    }
-
-
     render() {
-        const chat = <GiftedChat renderUsernameOnMessage={true} messages={this.state.messages} onSend={Fire.send} user={this.user}/>
-
-        if(Platform.OS == 'android') {
         return (
-            <KeyboardAvoidingView style={{flex:1}}  keyboardVerticalOffset={30} enabled>
-                    {chat}                    
-            </KeyboardAvoidingView>
+            <SafeAreaView style={{backgroundColor:'white',flex:1}}>
+                <FlatList
+                data={this.state.users}
+                renderItem={({item, index}) => this.renderRow(item, index)}
+                keyExtractor={(item) => item.id}
+                />
+            </SafeAreaView>
         );
     }
-    return <SafeAreaView style={{flex:1}}>{chat}</SafeAreaView>
-  }
 }
 export default InboxScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'white'
+    },
+    avatar: {
+        width: 66,
+        height: 66,
+        borderRadius: 68
+    }
+});

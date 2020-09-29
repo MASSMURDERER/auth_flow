@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { 
-    StyleSheet
+    StyleSheet,
+    Text,
+    Image
 } from "react-native";
 
 import {Button,Icon} from 'native-base'
@@ -16,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ExploreScreen from '../component/ExploreScreen'
 import Details from "../ExploreScreen/Details";
 import InboxScreen from '../component/InboxScreen'
+import ChatScreen from '../InboxScreen/ChatScreen'
 import PostScreen from '../component/PostScreen'
 import NotificationsScreen from '../component/NotificationsScreen'
 import Notify from "../NotificationsScreen/Notify"
@@ -26,28 +29,37 @@ import GalleryScreen from '../ProfileScreen/GalleryScreen'
 import CameraScreen from '../component/CameraScreen'
 import Gallery from "../component/Gallery";
 
-const ExploreStackScreen = ({navigation}) => {
+const ExploreStackScreen = ({navigation, route}) => {
+
+    if (route.state && route.state.index > 0) {
+        navigation.setOptions({tabBarVisible: false})
+    } else {
+        navigation.setOptions({tabBarVisible: true})
+    }
+
     return(
     <ExploreStack.Navigator screenOptions={{headerTitleStyle: {
-        marginLeft:66,color:'white'
+        paddingLeft:66,color:'black'
     }}}>
         <ExploreStack.Screen name="Home" component={ExploreScreen} options={{
             headerStyle:{
-                backgroundColor:'black'
+                backgroundColor:'white'
             },
             headerRight: () => (
                 <Button onPress={() => navigation.navigate('Inbox')} transparent>
-                <Icon style={{color:"white",fontSize:28,marginTop:7}} name="ios-rocket" />
+                <Icon style={{color:"black",fontSize:28,marginTop:7}} name="ios-rocket" />
                 </Button>
             ),
             headerTitle: "Moments",
             headerLeft: () => (
                 <Button onPress={() => navigation.navigate('Camera')} transparent>
-                <Icon style={{color:"white",fontSize:32,marginTop:7}} name='md-aperture' />
+                <Icon style={{color:"black",fontSize:28}} name="md-aperture" />    
+                <Image source={require('../assets/Moments.png')} style={{width:40, height:50,marginLeft:50}}/>
                 </Button>
             )
         }}/>
-        <ExploreStack.Screen name="Inbox" component={InboxScreen} />
+        <ExploreStack.Screen name="Inbox" component={InboxScreen}/>
+        <ExploreStack.Screen name="Chat" component={ChatScreen} options={({route}) => ({title: route.params.user.name})}/>
         <ExploreStack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}} />
         <ExploreStack.Screen name="Details" component={Details} />
     </ExploreStack.Navigator>
@@ -83,10 +95,10 @@ const PostStackScreen = () => {
 
 const ProfileStackScreen = () => {
     return(
-    <ProfileStack.Navigator screenOptions={{headerTitleStyle: {color:'white'}}}>
+    <ProfileStack.Navigator screenOptions={{headerTitleStyle: {color:'black'}}}>
         <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
-        <ProfileStack.Screen name="EditAvatar" component={EditAvatarScreen} options={{headerStyle:{backgroundColor:"black"}}}/>
-        <ProfileStack.Screen name="MyGallery" component={GalleryScreen} options={{headerStyle:{backgroundColor:"black"}}}/>
+        <ProfileStack.Screen name="EditAvatar" component={EditAvatarScreen} options={{headerStyle:{backgroundColor:"white"}}}/>
+        <ProfileStack.Screen name="MyGallery" component={GalleryScreen} options={{headerStyle:{backgroundColor:"white"}}}/>
     </ProfileStack.Navigator>
     )
 }
@@ -97,7 +109,7 @@ const ProfileStackScreen = () => {
 class MainScreen extends Component {
     render() {
         return (
-            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'red',inactiveTintColor:'white',activeBackgroundColor:"black", showLabel: false, keyboardHidesTabBar: true,inactiveBackgroundColor:'black'}}>
+            <Tab.Navigator initialRouteName='Home' backBehavior='none' tabBarOptions={{activeTintColor:'red',inactiveTintColor:'grey', showLabel: false, keyboardHidesTabBar: true}}>
 
                 <Tab.Screen name='Home' 
                 component={ExploreStackScreen}

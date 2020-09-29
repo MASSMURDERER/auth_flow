@@ -11,6 +11,7 @@ import Fire from '../Fire1'
 
 import Ionicons from "react-native-vector-icons/Ionicons"
 
+import * as firebase from 'firebase'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import UserPermissions from '../UserPermissions'
@@ -51,17 +52,6 @@ class SignUpScreen extends Component {
     render() {
         return (
           <View style={styles.container}>
-          <View style={{position: "absolute", top:64, alignItems:'center', width:'100%'}}>
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.handlePickAvatar}>
-            <Image source={this.state.user.avatar ? {uri:this.state.user.avatar} : require('../assets/alien.jpg')} style={styles.avatar} />
-            <Ionicons
-              name='ios-add'
-              size={40}
-              color={'black'}
-              style={{marginBottom:1, marginLeft:1}}
-              ></Ionicons>
-          </TouchableOpacity>
-          </View>
           <View style={{alignItems:'center',marginRight:10}}>
           <Text style={{fontWeight:'bold',fontSize:20}}>SignUp</Text>
           </View>
