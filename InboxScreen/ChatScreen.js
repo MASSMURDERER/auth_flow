@@ -4,6 +4,10 @@ import {
     StyleSheet,
     View,
     Text,
+    Animated,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
     Dimensions
 } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -14,6 +18,10 @@ import Fire from '../Fire1'
 
 import User from '../User'
 
+import moment from "moment"
+
+const isIOS = Platform.OS === 'ios'
+
 class ChatScreen extends Component {
 
 
@@ -21,29 +29,28 @@ class ChatScreen extends Component {
         super(props);
         this.state = {
             person: {
-                name: this.props.route.params.user.displayName,
-                phone: this.props.route.params.user.phoneNumber,
+                name: this.props.route.params.user.name,
             },
             messageList:[],
             textMessage: '',
-            user: {}
+            userDetails: {},
+            dbRef: firebase.database().ref('messages')
         }
+        this.keyboardHeight = new Animated.Value(0)
+        this.bottomPadding = new Animated.Value(0)
     }
 
     unsubscribe = null
 
     componentDidMount(){
+
+        this.fetchUserDetails()
         
-        const user = this.props.uid || Fire.shared.uid;
-
-        this.unsubscribe = Fire.shared.firestore
-        .collection("users")
-        .doc(user)
-        .onSnapshot(doc => {
-            this.setState({ user: doc.data() })
-        })
-
-        firebase.database().ref('messages').child(User.phone).child(this.state.person.phone)
+        this.keyboardShowListener = Keyboard.addListener(isIOS ? 'keyboardWillShow' : 'keyboardDidShow',
+            (e) => this.keyboardEvent(e, true))
+        this.keyboardShowListener = Keyboard.addListener(isIOS ? 'keyboardWillHide' : 'keyboardDidHide',
+            (e) => this.keyboardEvent(e, false))    
+        this.state.dbRef.child(User.name).child(this.state.person.name)
         .on('child_added', (value) => {
             this.setState((prevState) => {
                 return {
@@ -51,34 +58,58 @@ class ChatScreen extends Component {
                 }
             })
         })
-
     }
 
 
     componentWillUnmount() {
-        this.unsubscribe();
+        this.state.dbRef.off()
     }
 
+    keyboardEvent = (event, isShow) => {
+        let heightOS = isIOS ? 60 : 80
+        let bottomOS = isIOS ? 120 : 140
+        Animated.parallel([
+            Animated.timing(this.keyboardHeight, {
+                duration: event.duration,
+                toValue: isShow ? heightOS : 0
+            }),
+            Animated.timing(this.bottomPadding, {
+                duration: event.duration,
+                toValue: isShow ? bottomOS : 60
+            })
+        ]).start();
+    }
 
     handleChange = key => val => {
         this.setState({ [key]: val })
     }
+    
 
     sendMessage = async() => {
         if(this.state.textMessage.length > 0){
-            let msgId = firebase.database().ref('messages').child(this.state.user.phoneNumber).child(this.state.person.phone).push().key;
+            let msgId = this.state.dbRef.child(User.name).child(this.state.person.name).push().key;
             let updates = {};
             let message = {
                 message: this.state.textMessage,
                 time: firebase.database.ServerValue.TIMESTAMP,
-                from: this.state.user.phoneNumber
+                from: User.name
             }
-            updates['messages/' + this.state.user.phoneNumber + '/' + this.state.person.phone + '/'+ msgId] = message
-            updates['messages/'+ this.state.person.phone + '/' + this.state.user.phoneNumber + '/' + msgId] = message
-            firebase.database().ref().update(updates);
+            updates[User.name + '/' + this.state.person.name + '/'+ msgId] = message
+            updates[this.state.person.name + '/' + User.name + '/' + msgId] = message
+            this.state.dbRef.update(updates);
             this.setState({textMessage: ''});
         }
     }
+
+    fetchUserDetails = async () => {
+        try {
+          const userDetails = await Fire.shared.getUserDetails()
+          this.setState({ userDetails })
+        } catch (error) {
+          console.log(error)
+        }
+        User.name = this.state.userDetails.name
+      }
 
 
 
@@ -88,45 +119,47 @@ class ChatScreen extends Component {
         return(
             <View style={{
                 flexDirection:'row',
-                width:'60%',
-                alignSelf: item.from == this.state.user.phoneNumber ? 'flex-end' : 'flex-start',
-                backgroundColor: item.from == this.state.user.phoneNumber ? '#00897b' : '#7cb342',
+                maxWidth:'60%',
+                alignSelf: item.from == User.name ? 'flex-end' : 'flex-start',
+                backgroundColor: item.from == User.name ? '#00897b' : '#7cb342',
                 borderRadius: 5,
                 marginBottom: 10
             }}>
                 <Text style={{color:'#fff', padding:7, fontSize:16}}>
                     {item.message}
                 </Text>
-        <Text style={{color:'#eee', padding:3, fontSize:12}}>{item.time}</Text>
+        <Text style={{color:'#eee', padding:3, fontSize:12}}>{moment(item.time).fromNow()}</Text>
             </View>
         )
     }
 
 
    render() {
-       let {height, width} = Dimensions.get('window')
+       let {height} = Dimensions.get('window')
         return (
-            <SafeAreaView>
-                <FlatList
-                style={{padding:10, height: height * 0.8}}
-                    data={this.state.messageList}
-                    renderItem={this.renderRow}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-                <View style={{flexDirection: 'row', alignItems:'center'}}>
+            <KeyboardAvoidingView behavior="height" style={{flex: 1,backgroundColor:"white"}}>
+                <Animated.View style={[styles.bottomBar,{bottom: this.keyboardHeight}]}>
                 <TextInput
-                style={styles.input}
+                style={styles.inputMessage}
                 value={this.state.textMessage}
                 placeholder="Type Message..."
                 onChangeText={this.handleChange('textMessage')}
                 />
-                <View style={{top:-50}}>
-                <TouchableOpacity onPress={this.sendMessage}>
+                <TouchableOpacity onPress={this.sendMessage} style={{paddingBottom:10, marginLeft:5}}>
                     <Text style={styles.btnText}> Send </Text>
                 </TouchableOpacity>
-                </View>
-                </View>
-            </SafeAreaView>
+                </Animated.View>
+                <FlatList
+                    ref={ref => this.flatList = ref}
+                    onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                    onLayout={() => this.flatList.scrollToEnd({animated: true})}
+                    style={{paddingTop:5, paddingHorizontal: 5, height}}
+                    data={this.state.messageList}
+                    renderItem={this.renderRow}
+                    keyExtractor={(item, index) => index.toString()}
+                    ListFooterComponent={<Animated.View style={{height: this.bottomPadding}} />}
+                />                
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -136,19 +169,46 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     input: {
       padding: 10,
       borderWidth: 1,
       borderColor: '#ccc',
-      width: '80%',
+      width: '85%',
       marginBottom: 10,
       borderRadius: 5,
-      top:-50  
     },
+    inputMessage: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        width: '80%',
+        marginBottom: 10,
+        borderRadius: 20,
+      },
     btnText: {
         color: 'darkblue',
         fontSize: 20,
-    }
+    },
+    bottomBar: {
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        alignItems:'center',
+        padding:5,
+        position: 'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        zIndex:2,
+        height:60
+    },
+    sendButton :{
+        marginBottom:10,
+        marginLeft: 10,
+        height: 40,
+        width: 40,
+        paddingTop: 10,
+        paddingLeft: 5,
+    } 
 });

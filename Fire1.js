@@ -1,6 +1,7 @@
 import * as firebase from 'firebase'
 import User from './User'
 
+
 class Fire {
 
     getUserPosts = () => {
@@ -49,7 +50,7 @@ class Fire {
 
 
     
-    addPost = async ({text, localUri, displayName, avatar}) => {
+    addPost = async ({text, localUri, name, avatar}) => {
         const remoteUri = await this.uploadPhotoAsync(localUri, `photos/${this.uid}/${Date.now()}`)
 
         
@@ -57,12 +58,12 @@ class Fire {
         return new Promise((res,rej) => {
             this.firestore.collection("posts").add({
                 text,
-                displayName,
+                name,
                 avatar,
                 uid: this.uid,
                 timestamp:this.timestamp,
                 image: remoteUri,
-                likes: null
+                likes: []
             })
             .then(ref => {
                 res(ref)
@@ -96,40 +97,24 @@ class Fire {
     createUser = async user => {
         let remoteUri = null
 
-
-        if(user.displayName.length < 4) {
-            alert("Please enter atleast 4 characters")
-            return;
-          }
-
-          if(user.phoneNumber.length < 10) {
-            alert("Invalid Number")
-            return;
-          } 
-
         try{
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
 
-            firebase.database().ref('users/' + user.phoneNumber).set({name: user.displayName})
-            User.phone = user.phoneNumber
-
-            
             let db = this.firestore.collection("users").doc(this.uid)
+            
 
             db.set({
-                displayName: user.displayName,
-                phoneNumber: user.phoneNumber,
+                name:user.name,
                 email: user.email,
-                password: user.password,
                 avatar: null
             })
-            
 
             if (user.avatar) {
                 remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`)
 
                 db.set({avatar: remoteUri}, {merge: true})
             }
+            firebase.database().ref('users/' + user.name).set({name: user.name})
         } catch(error) {
             alert(error);
         }

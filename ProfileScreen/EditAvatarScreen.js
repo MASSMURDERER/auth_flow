@@ -77,7 +77,7 @@ export default EditAvatarScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'black'
+        backgroundColor:'white'
     },
     avatarContainer: {
       shadowColor: '#151734',

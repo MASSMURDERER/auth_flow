@@ -1,14 +1,15 @@
-
 import React, { Component } from "react";
 import { 
     View,
     Text,
     StyleSheet,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from "react-native";
 
 import * as firebase from 'firebase'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 class InboxScreen extends Component {
@@ -33,20 +34,21 @@ class InboxScreen extends Component {
         return(
             <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Chat', {user})} 
-            style={{padding:10,borderBottomColor:'#ccc',borderBottomWidth:1}}>
-                <Text style={{color:'black',fontWeight:'bold'}}>{user.displayName}</Text>
+            style={{padding:10,borderBottomColor:'#ccc',borderBottomWidth:1,flexDirection:'row'}}>
+                <Image style={styles.avatar} source={{uri:user.avatar}}/>
+                <Text style={{color:'black',fontWeight:'bold',fontSize:17,marginTop:20,marginLeft:10}}>{user.name}</Text>
             </TouchableOpacity>
         )
     }
     render() {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={{backgroundColor:'white',flex:1}}>
                 <FlatList
                 data={this.state.users}
                 renderItem={({item, index}) => this.renderRow(item, index)}
                 keyExtractor={(item) => item.id}
                 />
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -58,5 +60,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor:'white'
+    },
+    avatar: {
+        width: 66,
+        height: 66,
+        borderRadius: 68
     }
 });

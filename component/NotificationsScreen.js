@@ -2,15 +2,18 @@ import React, { Component } from "react";
 import { 
     View,
     Text,
+    Image,
     StyleSheet,
-    Button
 } from "react-native";
+import User from '../User'
 
 class NotificationsScreen extends Component {
+
+
     render() {
         return (
             <View style={styles.container}>
-                <Button title='Notifications' onPress={() => this.props.navigation.navigate('Notify', {name: 'Notifications'})} />
+               <Text>Notifications</Text>
             </View>
         );
     }
@@ -22,6 +25,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:'black'
+        backgroundColor:'white'
     }
 });

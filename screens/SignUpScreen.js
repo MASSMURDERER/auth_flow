@@ -11,20 +11,18 @@ import Fire from '../Fire1'
 
 import Ionicons from "react-native-vector-icons/Ionicons"
 
+import * as firebase from 'firebase'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import UserPermissions from '../UserPermissions'
 
 import * as ImagePicker from 'expo-image-picker'
 
-import User from '../User'
-
 class SignUpScreen extends Component {
   
   state = {
     user: {
-     displayName:'',
-     phoneNumber: null,
+     name:'',
      email: '',
      password: '',
      avatar: null
@@ -48,24 +46,12 @@ class SignUpScreen extends Component {
 
     handleName = () => {
       Fire.shared.createUser(this.state.user)
-      User.phone = this.state.user.phoneNumber
       }
 
 
     render() {
         return (
           <View style={styles.container}>
-          <View style={{position: "absolute", top:64, alignItems:'center', width:'100%'}}>
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.handlePickAvatar}>
-            <Image source={this.state.user.avatar ? {uri:this.state.user.avatar} : require('../assets/alien.jpg')} style={styles.avatar} />
-            <Ionicons
-              name='ios-add'
-              size={40}
-              color={'black'}
-              style={{marginBottom:1, marginLeft:1}}
-              ></Ionicons>
-          </TouchableOpacity>
-          </View>
           <View style={{alignItems:'center',marginRight:10}}>
           <Text style={{fontWeight:'bold',fontSize:20}}>SignUp</Text>
           </View>
@@ -79,16 +65,9 @@ class SignUpScreen extends Component {
           placeholder="Username"
           placeholderTextColor='grey'
           style={styles.textInput}
-          onChangeText={displayName => this.setState({ user: { ...this.state.user, displayName } })}
-          value={this.state.displayName}
-        />
-        <TextInput
-          placeholder="phoneNumber"
-          placeholderTextColor='grey'
-          style={styles.textInput}
-          onChangeText={phoneNumber => this.setState({ user: { ...this.state.user, phoneNumber } })}
-          value={this.state.phoneNumber}
-        />    
+          onChangeText={name => this.setState({ user: { ...this.state.user, name } })}
+          value={this.state.name}
+        />  
         <TextInput
           placeholder="Email"
           placeholderTextColor='grey'

@@ -12,8 +12,6 @@ import UserPermissions from '../UserPermissions'
 import * as ImagePicker from 'expo-image-picker';
 import Fire from '../Fire1'
 
-import {Icon, Button} from 'native-base'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const firebase = require("firebase");
@@ -21,11 +19,9 @@ require("firebase/firestore")
 
 class PostScreen extends Component {
     state={
-        user: {
-
-        },
+        user: {},
         text: "",
-        image: null,
+        image: null
     }
 
     unsubscribe = null
@@ -49,8 +45,8 @@ class PostScreen extends Component {
 
 
     handlePost = () => {
-        Fire.shared.addPost({text: this.state.text.trim(), localUri: this.state.image, displayName: this.state.user.displayName, avatar: this.state.user.avatar}).then(ref => {
-            this.setState({text:'', image: null, displayName: this.state.user.displayName, avatar: this.state.user.avatar})
+        Fire.shared.addPost({text: this.state.text.trim(), localUri: this.state.image, name: this.state.user.name, avatar: this.state.user.avatar}).then(ref => {
+            this.setState({text:'', image: null, name: this.state.user.name, avatar: this.state.user.avatar})
         }).catch(error => {
             alert(error)
         })
@@ -76,7 +72,7 @@ class PostScreen extends Component {
                       <Ionicons name='md-arrow-back' size={24} color="#D8D9DB"></Ionicons>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={this.handlePost}>
-                      <Text style={{ fontWeight:'bold', fontSize:17, color:'white' }}>Post</Text>
+                      <Text style={{ fontWeight:'bold', fontSize:17, color:'black' }}>Post</Text>
                   </TouchableOpacity>
               </View>
                 
@@ -84,11 +80,10 @@ class PostScreen extends Component {
                   <Image source={this.state.user.avatar
                                 ? {uri: this.state.user.avatar}
                                 : require('../assets/alien.jpg')} style={styles.avatar}></Image>
-                  <TextInput autoFocus={true} multiline={true} numberOfLines={4} style={{flex:1,color:'white'}} placeholder="Share your Moments..." placeholderTextColor='white' onChangeText={text => this.setState({text})} value={this.state.text}></TextInput>
+                  <TextInput autoFocus={true} multiline={true} numberOfLines={4} style={{flex:1,color:'black'}} placeholder="Share your Moments..." placeholderTextColor='black' onChangeText={text => this.setState({text})} value={this.state.text}></TextInput>
               </View>
               <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
-                <Ionicons name='ios-camera' size={36} color='white'></Ionicons>
-                
+                <Ionicons name='ios-camera' size={36} color='black'></Ionicons>
               </TouchableOpacity>
               <View style={{marginHorizontal: 32, marginTop: 32, height: 150}}>
                 <Image source={{uri: this.state.image}} style={{width: 300,height:300}}></Image>
@@ -102,7 +97,7 @@ export default PostScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'black'
+        backgroundColor:'white'
     },
     header: {
         flexDirection: 'row',

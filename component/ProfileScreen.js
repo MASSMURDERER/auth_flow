@@ -7,14 +7,9 @@ import {
     Image
 } from "react-native";
 
-
+import User from '../User'
 import Fire from '../Fire1'
 import { TouchableOpacity } from "react-native-gesture-handler";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
-import UserPermissions from '../UserPermissions'
-
-import * as ImagePicker from 'expo-image-picker'
 
 class ProfileScreen extends Component {
 
@@ -22,9 +17,6 @@ class ProfileScreen extends Component {
         user: {},
         images: [],
         userDetails:{},
-        updatedUser:{
-            avatar:null
-        }
     }
 
     unsubscribe = null;
@@ -69,48 +61,34 @@ class ProfileScreen extends Component {
         } catch (error) {
           console.log(error)
         }
+        User.name = this.state.userDetails.name
       }
-
-      handlePickAvatar = async () => {
-        UserPermissions.getCameraPermission();
-       
-       let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [4, 3],
-       });
-       
-       if (!result.cancelled) {
-          this.setState({ updatedUser: { ...this.state.updatedUser, avatar: result.uri } });
-       }
-       Fire.shared.updateProfile(this.state.updatedUser);
-       };
 
 
     render() {
-        const { images, userDetails } = this.state
+        const { images } = this.state
         return (
             <View style={styles.container}>
                 <View style={{marginTop: 64, alignItems: 'center'}}>
-                <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.handlePickAvatar}>
+                    <View style={styles.avatarContainer}>
                         <Image style={styles.avatar}
-                                source={{uri:this.state.user.avatar}
+                                source={this.state.user.avatar
+                                    ? {uri:this.state.user.avatar}
+                                    : require('../assets/alien.jpg')
                                 }/>
-                                <MaterialIcons 
-                     name="photo-camera" 
-                     size={40} color="grey" 
-                     style={{ marginTop: 6, marginLeft: 2 }} 
-                     />
-                    </TouchableOpacity>
+                    </View>
                 </View>
                 
                 <View style={{padding:110,top:-50,left:10,flexDirection:'row',justifyContent:"center",marginVertical:10}}>
                 <View style={{marginRight:30}}>
                 <Button onPress={() => {Fire.shared.signOut()}} title="Logout" />
-                </View>            
+                </View>
+                <View>
+                <Button title="Edit Profile" onPress={() => this.props.navigation.navigate('EditAvatar')} />
+                </View>
                 </View>
                 <View style={{justifyContent: 'center',alignItems:'center', top:-250}}>
-                    <Text style={styles.name}>{userDetails.displayName}</Text>
+                    <Text style={styles.name}>{User.name}</Text>
                 </View>
                 <View style={{alignItems:'center',top:-150}}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('MyGallery') }>
@@ -126,7 +104,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'black'
+        backgroundColor:'white'
     },
     avatarContainer: {
         shadowColor: '#151734',
@@ -141,7 +119,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: "bold",
-        color:'white'
+        color:'black'
     },
     border: {
         width: 200,
